@@ -27,10 +27,12 @@
       </div>
     </div>
 
-    <div class="text-center p-6">
+    
+    <!-- PWA Status Cards -->
+    <div class="px-4 text-center p-6">
           <router-link 
             to="/playlist" 
-            class="inline-block w-full bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 mr-4 mb-4"
+            class="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 mr-4 mb-4"
           >
             View Playlists
           </router-link>
@@ -41,8 +43,6 @@
             Test Offline Mode
           </button> -->
     </div>
-
-    <!-- PWA Status Cards -->
     <div class="px-4 pb-8">
       <div class="max-w-4xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
