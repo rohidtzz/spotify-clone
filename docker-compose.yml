@@ -1,0 +1,10 @@
+services:
+  spotify-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8060:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
