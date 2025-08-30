@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background circle with Spotify green -->
+  <circle cx="256" cy="256" r="256" fill="#1db954"/>
+  
+  <!-- Spotify logo curves -->
+  <g transform="translate(256,256)">
+    <!-- Main curve 1 -->
+    <path d="M-80,-40 Q0,-80 80,-40 Q60,-20 0,-30 Q-60,-20 -80,-40" 
+          fill="#ffffff" opacity="0.9"/>
+    
+    <!-- Main curve 2 -->
+    <path d="M-60,-10 Q0,-40 60,-10 Q45,5 0,-5 Q-45,5 -60,-10" 
+          fill="#ffffff" opacity="0.8"/>
+    
+    <!-- Main curve 3 -->
+    <path d="M-40,20 Q0,-10 40,20 Q30,30 0,25 Q-30,30 -40,20" 
+          fill="#ffffff" opacity="0.7"/>
+    
+    <!-- Music note accent -->
+    <circle cx="0" cy="0" r="8" fill="#ffffff" opacity="0.3"/>
+    
+    <!-- Additional decorative elements -->
+    <circle cx="-30" cy="-30" r="3" fill="#ffffff" opacity="0.4"/>
+    <circle cx="30" cy="-30" r="3" fill="#ffffff" opacity="0.4"/>
+    <circle cx="0" cy="40" r="4" fill="#ffffff" opacity="0.4"/>
+  </g>
+  
+  <!-- Outer ring for better visibility -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#ffffff" stroke-width="8" opacity="0.1"/>
+</svg>

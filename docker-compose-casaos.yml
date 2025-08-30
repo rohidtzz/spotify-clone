@@ -1,0 +1,30 @@
+# CasaOS App Configuration for Spotify PWA
+# Save this as docker-compose-casaos.yml or use in CasaOS App Store
+
+version: '3.8'
+services:
+  spotify-pwa:
+    build: .
+    container_name: spotify-pwa
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./data:/data  # Optional: for persistent data
+    networks:
+      - casaos
+    labels:
+      # CasaOS specific labels
+      - "casaos.name=Spotify PWA"
+      - "casaos.icon=https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/spotify.png"
+      - "casaos.description=Beautiful Vue.js Spotify clone with PWA support"
+      - "casaos.category=Media"
+      - "casaos.port=8080"
+      - "casaos.scheme=http"
+      - "casaos.web_ui=true"
+      
+networks:
+  casaos:
+    external: true

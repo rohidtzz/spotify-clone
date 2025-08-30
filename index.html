@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="A beautiful music streaming app built with Vue.js">
+    <meta name="keywords" content="music, streaming, player, spotify, vue">
+    <meta name="author" content="Spotify Clone">
+    
+    <!-- PWA Theme -->
+    <meta name="theme-color" content="#1db954">
+    <meta name="msapplication-TileColor" content="#1db954">
+    <meta name="msapplication-navbutton-color" content="#1db954">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- PWA App Settings -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Spotify">
+    <meta name="application-name" content="Spotify">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/icon-128x128.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
+    
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+    
+    <title>Spotify - Music Player</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+    
+    <!-- PWA Install Prompt -->
+    <script>
+      // Register Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

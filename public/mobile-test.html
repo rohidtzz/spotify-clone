@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Mobile PWA Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1db954 0%, #191414 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .big-button {
+            background: #1db954;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 15px 0;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .big-button:hover {
+            background: #1ed760;
+            transform: translateY(-2px);
+        }
+        
+        .info {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .current-url {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        
+        .step {
+            text-align: left;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            background: #1db954;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Mobile PWA Test</h1>
+        
+        <div class="card">
+            <h3>🌐 Current Access</h3>
+            <div class="current-url" id="current-url">
+                Loading...
+            </div>
+            <div class="info">
+                <strong>Network IP:</strong> 192.168.1.9:5173<br>
+                <strong>Status:</strong> <span id="connection-status">Testing...</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>🚀 Quick Tests</h3>
+            <a href="/" class="big-button">🎵 Open Spotify App</a>
+            <a href="/pwa-test.html" class="big-button">🧪 PWA Test Page</a>
+            <a href="/manifest.json" class="big-button">📄 View Manifest</a>
+        </div>
+        
+        <div class="card">
+            <h3>📱 Install PWA Steps</h3>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Chrome/Edge Mobile:</strong><br>
+                Buka menu (⋮) → "Add to Home screen"
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Safari iOS:</strong><br>
+                Tap Share (📤) → "Add to Home Screen"
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Samsung Internet:</strong><br>
+                Menu → "Add page to" → "Home screen"
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>🔧 Troubleshooting</h3>
+            <div class="info">
+                • Pastikan di jaringan WiFi yang sama<br>
+                • Gunakan Chrome/Edge untuk hasil terbaik<br>
+                • Manifest harus accessible untuk install<br>
+                • Refresh halaman jika ada masalah
+            </div>
+        </div>
+        
+        <div class="card" id="pwa-status-card">
+            <h3>✅ PWA Status</h3>
+            <div id="mobile-pwa-status">Checking...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Update current URL
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        // Test connection and PWA status
+        async function checkMobilePWA() {
+            const statusEl = document.getElementById('mobile-pwa-status');
+            const connEl = document.getElementById('connection-status');
+            let status = '';
+            
+            // Test manifest
+            try {
+                const response = await fetch('/manifest.json');
+                if (response.ok) {
+                    connEl.textContent = '✅ Connected';
+                    connEl.style.color = '#1db954';
+                    
+                    const manifest = await response.json();
+                    status += `✅ Manifest: ${manifest.name}<br>`;
+                } else {
+                    throw new Error('Manifest not accessible');
+                }
+            } catch (err) {
+                connEl.textContent = '❌ Connection Issue';
+                connEl.style.color = '#ff4444';
+                status += `❌ Manifest: ${err.message}<br>`;
+            }
+            
+            // Test Service Worker
+            if ('serviceWorker' in navigator) {
+                status += '✅ Service Worker: Supported<br>';
+                try {
+                    const reg = await navigator.serviceWorker.getRegistration();
+                    if (reg) {
+                        status += '✅ Service Worker: Registered<br>';
+                    } else {
+                        status += '⚠️ Service Worker: Not registered<br>';
+                    }
+                } catch (err) {
+                    status += '❌ Service Worker: Error<br>';
+                }
+            } else {
+                status += '❌ Service Worker: Not supported<br>';
+            }
+            
+            // Test install prompt
+            let installAvailable = false;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                installAvailable = true;
+                status += '✅ Install: Available<br>';
+                statusEl.innerHTML = status;
+            });
+            
+            setTimeout(() => {
+                if (!installAvailable) {
+                    status += '⚠️ Install: Not available (may be installed)<br>';
+                }
+                statusEl.innerHTML = status;
+            }, 2000);
+            
+            statusEl.innerHTML = status;
+        }
+        
+        // Run checks when page loads
+        document.addEventListener('DOMContentLoaded', checkMobilePWA);
+    </script>
+</body>
+</html>
