@@ -6,7 +6,7 @@
                 <!-- Back Button -->
                 <div class="mb-6">
                     <router-link 
-                        to="/"
+                        to="/playlist"
                         class="inline-flex items-center text-gray-300 hover:text-white transition-colors duration-300"
                     >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
