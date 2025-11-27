@@ -32,12 +32,19 @@
                         
                         <!-- Play All Button -->
                         <div class="mt-6">
-                            <button @click="playAllSongs" class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <button 
+                                @click="playAllSongs" 
+                                :disabled="isLoading"
+                                class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            >
                                 <div class="flex items-center">
-                                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg v-if="isLoading" class="w-6 h-6 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    <svg v-else class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M8 5v14l11-7z"/>
                                     </svg>
-                                    Play All
+                                    {{ isLoading ? 'Loading...' : 'Play All' }}
                                 </div>
                             </button>
                         </div>
@@ -75,7 +82,12 @@
                                 </svg>
                             </span>
                             <span v-else class="text-gray-400 group-hover:hidden">{{ index + 1 }}</span>
-                            <button v-if="currentSongIndex !== index" class="hidden group-hover:inline-block text-white hover:text-green-400 transition-colors" @click="playSong(value, index)">
+                            <button 
+                                v-if="currentSongIndex !== index" 
+                                :disabled="isLoading"
+                                class="hidden group-hover:inline-block text-white hover:text-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                                @click="playSong(value, index)"
+                            >
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M8 5v14l11-7z"/>
                                 </svg>
@@ -109,15 +121,22 @@
 
                         <!-- Play Button -->
                         <div class="col-span-2 text-center">
-                            <button @click="playSong(value, index)" class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <button 
+                                @click="currentSongIndex === index && !isLoading ? togglePlayPause() : playSong(value, index)" 
+                                :disabled="isLoading"
+                                class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            >
                                 <div class="flex items-center justify-center">
-                                    <svg v-if="currentSongIndex === index && isPlaying" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg v-if="isLoading && currentSongIndex === index" class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    <svg v-else-if="currentSongIndex === index && isPlaying" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                                     </svg>
                                     <svg v-else class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M8 5v14l11-7z"/>
                                     </svg>
-                                    {{ currentSongIndex === index && isPlaying ? 'Pause' : 'Play' }}
+                                    {{ isLoading && currentSongIndex === index ? 'Loading...' : (currentSongIndex === index && isPlaying ? 'Pause' : 'Play') }}
                                 </div>
                             </button>
                         </div>
@@ -154,9 +173,11 @@
                                 :min="0" 
                                 :max="duration || 0" 
                                 :value="currentTime" 
-                                @input="seekTo($event.target.value)"
+                                @change="seekTo($event.target.value)"
                                 @mousedown="onProgressMouseDown"
                                 @mouseup="onProgressMouseUp"
+                                @touchstart="onProgressMouseDown"
+                                @touchend="onProgressMouseUp"
                                 class="w-full appearance-none cursor-pointer progress-slider"
                             />
                         </div>
@@ -207,7 +228,7 @@
                         <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                         </svg>
-                        <div class="w-24">
+                        <div class="w-24 h-8">
                             <input 
                                 type="range" 
                                 :min="0" 
@@ -245,7 +266,8 @@ export default {
       volume: parseFloat(localStorage.getItem('spotify-volume')) || 0.7,
       currentTime: 0,
       duration: 0,
-      isDragging: false
+      isDragging: false,
+      isLoading: false
     };
   },
   watch: {
@@ -282,12 +304,28 @@ export default {
       }
     },
     async playSong(song, index) {
+      // Prevent multiple clicks while loading
+      if (this.isLoading) {
+        return
+      }
+
       try {
-        // Stop current song if playing
+        this.isLoading = true
+
+        // Clean up old audio player
         if (this.audioPlayer) {
           this.audioPlayer.pause()
+          this.audioPlayer.removeEventListener('ended', this.onAudioEnded)
+          this.audioPlayer.removeEventListener('pause', this.onAudioPause)
+          this.audioPlayer.removeEventListener('play', this.onAudioPlay)
+          this.audioPlayer.removeEventListener('timeupdate', this.onAudioTimeUpdate)
+          this.audioPlayer.removeEventListener('loadedmetadata', this.onAudioLoadedMetadata)
           URL.revokeObjectURL(this.currentSong)
         }
+
+        // Reset time and duration
+        this.currentTime = 0
+        this.duration = 0
 
         // Get the audio stream
         const response = await api.get('/stream.view?id=' + song.id, {
@@ -300,37 +338,43 @@ export default {
         // Create and play audio
         this.audioPlayer = new Audio(this.currentSong)
         this.audioPlayer.volume = this.volume
-        this.audioPlayer.play()
+        
+        // Add event listeners (using bound methods)
+        this.audioPlayer.addEventListener('ended', this.onAudioEnded)
+        this.audioPlayer.addEventListener('pause', this.onAudioPause)
+        this.audioPlayer.addEventListener('play', this.onAudioPlay)
+        this.audioPlayer.addEventListener('timeupdate', this.onAudioTimeUpdate)
+        this.audioPlayer.addEventListener('loadedmetadata', this.onAudioLoadedMetadata)
+        
+        // Wait for audio to be ready before playing
+        await this.audioPlayer.play()
         this.isPlaying = true
-
-        // Handle audio events
-        this.audioPlayer.addEventListener('ended', () => {
-          this.playNextSong()
-        })
-
-        this.audioPlayer.addEventListener('pause', () => {
-          this.isPlaying = false
-        })
-
-        this.audioPlayer.addEventListener('play', () => {
-          this.isPlaying = true
-        })
-
-        this.audioPlayer.addEventListener('timeupdate', () => {
-          if (!this.isDragging) {
-            this.currentTime = this.audioPlayer.currentTime
-            this.updateProgressSlider()
-          }
-        })
-
-        this.audioPlayer.addEventListener('loadedmetadata', () => {
-          this.duration = this.audioPlayer.duration
-          // Initialize volume slider when song starts
-          this.updateVolumeSlider()
-        })
+        this.isLoading = false
 
       } catch (error) {
         console.error('Error playing song:', error)
+        this.isLoading = false
+      }
+    },
+    onAudioEnded() {
+      this.playNextSong()
+    },
+    onAudioPause() {
+      this.isPlaying = false
+    },
+    onAudioPlay() {
+      this.isPlaying = true
+    },
+    onAudioTimeUpdate() {
+      if (!this.isDragging && this.audioPlayer) {
+        this.currentTime = this.audioPlayer.currentTime
+        this.updateProgressSlider()
+      }
+    },
+    onAudioLoadedMetadata() {
+      if (this.audioPlayer) {
+        this.duration = this.audioPlayer.duration
+        this.updateVolumeSlider()
       }
     },
     async playAllSongs() {
@@ -377,9 +421,9 @@ export default {
       }
     },
     seekTo(time) {
-      if (this.audioPlayer) {
-        this.audioPlayer.currentTime = time
-        this.currentTime = time
+      if (this.audioPlayer && !isNaN(time)) {
+        const seekTime = parseFloat(time)
+        this.audioPlayer.currentTime = seekTime
       }
     },
     formatTime(seconds) {
@@ -415,6 +459,11 @@ export default {
     // Clean up audio when component is destroyed
     if (this.audioPlayer) {
       this.audioPlayer.pause()
+      this.audioPlayer.removeEventListener('ended', this.onAudioEnded)
+      this.audioPlayer.removeEventListener('pause', this.onAudioPause)
+      this.audioPlayer.removeEventListener('play', this.onAudioPlay)
+      this.audioPlayer.removeEventListener('timeupdate', this.onAudioTimeUpdate)
+      this.audioPlayer.removeEventListener('loadedmetadata', this.onAudioLoadedMetadata)
       URL.revokeObjectURL(this.currentSong)
     }
   }
