@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-gray-900 dark:via-gray-800 dark:to-black">
+  <div class="min-h-screen bg-gray-900">
     <!-- Header Section -->
     <div class="pt-8 pb-6 px-4">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-8">
           <div class="mb-4">
-            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-2xl">
+            <div class="w-20 h-20 mx-auto bg-green-500 rounded-full flex items-center justify-center">
               <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
               </svg>
@@ -24,11 +24,11 @@
           <div v-for="value in playlists" :key="value.id" class="group">
             <router-link 
               :to="{ name: 'PlaylistId', params: { playlistId: value.id } }"
-              class="block bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-gray-700/50 hover:border-green-500/50 group-hover:bg-gray-800/70"
+              class="block bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-green-500 hover:bg-gray-700"
             >
               <!-- Playlist Icon -->
               <div class="mb-4">
-                <div class="w-16 h-16 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                <div class="w-16 h-16 bg-green-500 rounded-xl flex items-center justify-center">
                   <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                   </svg>
@@ -37,17 +37,17 @@
               
               <!-- Playlist Info -->
               <div>
-                <h2 class="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors duration-300 line-clamp-2">
+                <h2 class="text-xl font-bold text-white mb-2 group-hover:text-green-400 line-clamp-2">
                   {{ value.name }}
                 </h2>
-                <p class="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">
+                <p class="text-gray-400 text-sm">
                   Playlist • {{ value.songCount || 'Unknown' }} songs
                 </p>
               </div>
 
               <!-- Play Button Overlay -->
-              <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+              <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100">
+                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-400">
                   <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"/>
                   </svg>
@@ -112,39 +112,5 @@ export default {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom backdrop blur fallback */
-.backdrop-blur-sm {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-/* Enhanced hover effects */
-.group:hover .transform {
-  transform: translateY(-8px) scale(1.02);
-}
-
-/* Gradient animation */
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.bg-gradient-to-br {
-  background-size: 200% 200%;
-  animation: gradient 15s ease infinite;
 }
 </style>

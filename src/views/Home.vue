@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+  <div class="min-h-screen bg-gray-900">
     <!-- Install PWA Button - Only show if not installed and can install -->
     <button 
       v-if="showInstallButton"
@@ -15,7 +15,7 @@
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-8">
           <div class="mb-4">
-            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-2xl">
+            <div class="w-20 h-20 mx-auto bg-green-500 rounded-full flex items-center justify-center">
               <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
@@ -47,7 +47,7 @@
       <div class="max-w-4xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <!-- Installation Status -->
-          <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-gray-700/50">
+          <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
             <div class="flex items-center mb-4">
               <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
                 <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -61,7 +61,7 @@
           </div>
 
           <!-- Offline Status -->
-          <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-gray-700/50">
+          <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
             <div class="flex items-center mb-4">
               <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
                 <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@
         </div>
 
         <!-- Features List -->
-        <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-700/50">
+        <div class="bg-gray-800 p-8 rounded-xl border border-gray-700">
           <h2 class="text-2xl font-bold mb-6 text-white">PWA Features</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="flex items-center text-gray-300">

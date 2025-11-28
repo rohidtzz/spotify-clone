@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-gray-900 dark:via-gray-800 dark:to-black">
+    <div class="min-h-screen bg-gray-900">
         <!-- Header Section -->
         <div class="pt-8 pb-6 px-4">
             <div class="max-w-6xl mx-auto">
@@ -7,7 +7,7 @@
                 <div class="mb-6">
                     <router-link 
                         to="/playlist"
-                        class="inline-flex items-center text-gray-300 hover:text-white transition-colors duration-300"
+                        class="inline-flex items-center text-gray-300 hover:text-white"
                     >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -18,7 +18,7 @@
 
                 <!-- Playlist Header -->
                 <div class="flex items-start space-x-6 mb-8">
-                    <div class="hidden md:flex w-48 h-48 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl items-center justify-center">
+                    <div class="hidden md:flex w-48 h-48 bg-green-500 rounded-xl items-center justify-center">
                         <svg class="w-24 h-24 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                         </svg>
@@ -35,10 +35,10 @@
                             <button 
                                 @click="playAllSongs" 
                                 :disabled="isLoading"
-                                class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <div class="flex items-center">
-                                    <svg v-if="isLoading" class="w-6 h-6 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg v-if="isLoading" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
                                     <svg v-else class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -56,9 +56,9 @@
         <!-- Songs List -->
         <div class="px-4 pb-8">
             <div class="max-w-6xl mx-auto">
-                <div class="bg-black/20 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
                     <!-- Table Header -->
-                    <div class="grid grid-cols-12 gap-4 pb-3 mb-4 border-b border-gray-700/50 text-gray-400 text-sm font-medium">
+                    <div class="grid grid-cols-12 gap-4 pb-3 mb-4 border-b border-gray-700 text-gray-400 text-sm font-medium">
                         <div class="col-span-1 text-center">#</div>
                         <div class="col-span-6">TITLE</div>
                         <div class="col-span-3">ARTIST</div>
@@ -67,12 +67,12 @@
 
                     <!-- Songs -->
                     <div v-for="(value, index) in songs" :key="value.id" 
-                         class="group grid grid-cols-12 gap-4 py-3 hover:bg-white/5 rounded-lg transition-all duration-300 items-center"
-                         :class="{ 'bg-green-500/10 border-l-4 border-l-green-500': currentSongIndex === index }">
+                         class="group grid grid-cols-12 gap-4 py-3 hover:bg-gray-700 rounded-lg items-center"
+                         :class="{ 'bg-green-900 border-l-4 border-l-green-500': currentSongIndex === index }">
                         <!-- Track Number -->
                         <div class="col-span-1 text-center">
                             <span v-if="currentSongIndex === index && isPlaying" class="text-green-400">
-                                <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M8 5v14l11-7z"/>
                                 </svg>
                             </span>
@@ -85,7 +85,7 @@
                             <button 
                                 v-if="currentSongIndex !== index" 
                                 :disabled="isLoading"
-                                class="hidden group-hover:inline-block text-white hover:text-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                                class="hidden group-hover:inline-block text-white hover:text-green-400 disabled:opacity-50 disabled:cursor-not-allowed" 
                                 @click="playSong(value, index)"
                             >
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -103,7 +103,7 @@
                                     </svg>
                                 </div> -->
                                 <div>
-                                    <h3 class="text-white font-medium group-hover:text-green-400 transition-colors line-clamp-1"
+                                    <h3 class="text-white font-medium group-hover:text-green-400 line-clamp-1"
                                         :class="{ 'text-green-400': currentSongIndex === index }">
                                         {{ value.title }}
                                     </h3>
@@ -114,7 +114,7 @@
 
                         <!-- Artist -->
                         <div class="col-span-3">
-                            <p class="text-gray-300 hover:text-white transition-colors cursor-pointer line-clamp-1">
+                            <p class="text-gray-300 hover:text-white cursor-pointer line-clamp-1">
                                 {{ value.artist }}
                             </p>
                         </div>
@@ -124,10 +124,10 @@
                             <button 
                                 @click="currentSongIndex === index && !isLoading ? togglePlayPause() : playSong(value, index)" 
                                 :disabled="isLoading"
-                                class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-6 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <div class="flex items-center justify-center">
-                                    <svg v-if="isLoading && currentSongIndex === index" class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg v-if="isLoading && currentSongIndex === index" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
                                     <svg v-else-if="currentSongIndex === index && isPlaying" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
@@ -161,7 +161,7 @@
         <div v-else class="md:h-28"></div>
 
         <!-- Music Player Bar (Fixed Bottom) -->
-        <div v-if="currentSong" class="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-700/50 p-4">
+        <div v-if="currentSong" class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 p-4">
             <div class="max-w-6xl mx-auto">
                 <!-- Progress Bar -->
                 <div class="mb-4">
@@ -201,13 +201,13 @@
 
                     <!-- Player Controls (Center) -->
                     <div class="flex items-center justify-center space-x-4">
-                        <button @click="playPreviousSong" class="text-gray-300 hover:text-white transition-colors" :disabled="currentSongIndex <= 0">
+                        <button @click="playPreviousSong" class="text-gray-300 hover:text-white" :disabled="currentSongIndex <= 0">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
                             </svg>
                         </button>
                         
-                        <button @click="togglePlayPause" class="bg-white text-black rounded-full p-3 hover:scale-105 transition-transform">
+                        <button @click="togglePlayPause" class="bg-white text-black rounded-full p-3">
                             <svg v-if="isPlaying" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                             </svg>
@@ -216,7 +216,7 @@
                             </svg>
                         </button>
 
-                        <button @click="playNextSong" class="text-gray-300 hover:text-white transition-colors">
+                        <button @click="playNextSong" class="text-gray-300 hover:text-white">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
                             </svg>
@@ -481,45 +481,6 @@ export default {
   overflow: hidden;
 }
 
-/* Custom backdrop blur fallback */
-.backdrop-blur-sm {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Gradient animation */
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.bg-gradient-to-br {
-  background-size: 200% 200%;
-  animation: gradient 15s ease infinite;
-}
-
-/* Enhanced hover effects */
-.group:hover .transform {
-  transform: translateY(-2px) scale(1.02);
-}
-
-/* Button hover effects */
-button:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-
 /* Grid responsive adjustments */
 @media (max-width: 768px) {
   .grid.grid-cols-12 {
@@ -548,13 +509,6 @@ button:hover {
   background: #ffffff;
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.progress-slider:hover::-webkit-slider-thumb {
-  opacity: 1;
 }
 
 .progress-slider::-moz-range-thumb {
@@ -564,7 +518,6 @@ button:hover {
   background: #ffffff;
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
 }
 
 .volume-slider {
@@ -582,7 +535,6 @@ button:hover {
   background: #ffffff;
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
 }
 
 .volume-slider::-moz-range-thumb {
@@ -592,7 +544,6 @@ button:hover {
   background: #ffffff;
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
 }
 
 /* Update slider progress dynamically */
