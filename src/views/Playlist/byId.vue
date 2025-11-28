@@ -38,7 +38,7 @@
                                 class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <div class="flex items-center">
-                                    <svg v-if="isLoading" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg v-if="isLoading" class="w-6 h-6 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
                                     <svg v-else class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@
                                 class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-6 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <div class="flex items-center justify-center">
-                                    <svg v-if="isLoading && currentSongIndex === index" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg v-if="isLoading && currentSongIndex === index" class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
                                     <svg v-else-if="currentSongIndex === index && isPlaying" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
@@ -309,19 +309,16 @@ export default {
         return
       }
 
+      // Prevent playing the same song that's already playing
+      if (this.currentSongIndex === index && this.audioPlayer && !this.audioPlayer.paused) {
+        return
+      }
+
       try {
         this.isLoading = true
 
-        // Clean up old audio player
-        if (this.audioPlayer) {
-          this.audioPlayer.pause()
-          this.audioPlayer.removeEventListener('ended', this.onAudioEnded)
-          this.audioPlayer.removeEventListener('pause', this.onAudioPause)
-          this.audioPlayer.removeEventListener('play', this.onAudioPlay)
-          this.audioPlayer.removeEventListener('timeupdate', this.onAudioTimeUpdate)
-          this.audioPlayer.removeEventListener('loadedmetadata', this.onAudioLoadedMetadata)
-          URL.revokeObjectURL(this.currentSong)
-        }
+        // Stop and clean up ALL existing audio elements to prevent double play
+        this.stopAllAudio()
 
         // Reset time and duration
         this.currentTime = 0
@@ -331,20 +328,36 @@ export default {
         const response = await api.get('/stream.view?id=' + song.id, {
           responseType: 'blob'
         })
+        
+        // Check if another song started loading while we were fetching
+        if (!this.isLoading) {
+          return
+        }
+
         const audioBlob = new Blob([response.data], { type: 'audio/mpeg' })
-        this.currentSong = URL.createObjectURL(audioBlob)
+        const newSongUrl = URL.createObjectURL(audioBlob)
+        
+        // Clean up old URL if exists
+        if (this.currentSong) {
+          URL.revokeObjectURL(this.currentSong)
+        }
+        
+        this.currentSong = newSongUrl
         this.currentSongIndex = index
 
-        // Create and play audio
-        this.audioPlayer = new Audio(this.currentSong)
-        this.audioPlayer.volume = this.volume
+        // Create new audio player
+        const newAudioPlayer = new Audio(this.currentSong)
+        newAudioPlayer.volume = this.volume
         
         // Add event listeners (using bound methods)
-        this.audioPlayer.addEventListener('ended', this.onAudioEnded)
-        this.audioPlayer.addEventListener('pause', this.onAudioPause)
-        this.audioPlayer.addEventListener('play', this.onAudioPlay)
-        this.audioPlayer.addEventListener('timeupdate', this.onAudioTimeUpdate)
-        this.audioPlayer.addEventListener('loadedmetadata', this.onAudioLoadedMetadata)
+        newAudioPlayer.addEventListener('ended', this.onAudioEnded)
+        newAudioPlayer.addEventListener('pause', this.onAudioPause)
+        newAudioPlayer.addEventListener('play', this.onAudioPlay)
+        newAudioPlayer.addEventListener('timeupdate', this.onAudioTimeUpdate)
+        newAudioPlayer.addEventListener('loadedmetadata', this.onAudioLoadedMetadata)
+        
+        // Set the new audio player
+        this.audioPlayer = newAudioPlayer
         
         // Wait for audio to be ready before playing
         await this.audioPlayer.play()
@@ -354,7 +367,23 @@ export default {
       } catch (error) {
         console.error('Error playing song:', error)
         this.isLoading = false
+        this.isPlaying = false
       }
+    },
+    stopAllAudio() {
+      // Stop current audio player
+      if (this.audioPlayer) {
+        this.audioPlayer.pause()
+        this.audioPlayer.currentTime = 0
+        this.audioPlayer.removeEventListener('ended', this.onAudioEnded)
+        this.audioPlayer.removeEventListener('pause', this.onAudioPause)
+        this.audioPlayer.removeEventListener('play', this.onAudioPlay)
+        this.audioPlayer.removeEventListener('timeupdate', this.onAudioTimeUpdate)
+        this.audioPlayer.removeEventListener('loadedmetadata', this.onAudioLoadedMetadata)
+        this.audioPlayer.src = ''
+        this.audioPlayer = null
+      }
+      this.isPlaying = false
     },
     onAudioEnded() {
       this.playNextSong()
@@ -457,13 +486,8 @@ export default {
   },
   beforeUnmount() {
     // Clean up audio when component is destroyed
-    if (this.audioPlayer) {
-      this.audioPlayer.pause()
-      this.audioPlayer.removeEventListener('ended', this.onAudioEnded)
-      this.audioPlayer.removeEventListener('pause', this.onAudioPause)
-      this.audioPlayer.removeEventListener('play', this.onAudioPlay)
-      this.audioPlayer.removeEventListener('timeupdate', this.onAudioTimeUpdate)
-      this.audioPlayer.removeEventListener('loadedmetadata', this.onAudioLoadedMetadata)
+    this.stopAllAudio()
+    if (this.currentSong) {
       URL.revokeObjectURL(this.currentSong)
     }
   }
