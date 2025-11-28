@@ -1,15 +1,41 @@
 {
-  "name": "spotify",
-  "version": "0.0.0",
+  "name": "spotify-clone",
+  "version": "1.0.0",
+  "description": "Spotify Clone PWA - Music streaming frontend for Navidrome/Subsonic servers",
   "private": true,
   "type": "module",
+  "license": "GPL-3.0-or-later",
+  "author": "spot-downloader",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spot-downloader/spotify-clone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/spot-downloader/spotify-clone/issues"
+  },
+  "homepage": "https://github.com/spot-downloader/spotify-clone#readme",
+  "keywords": [
+    "spotify",
+    "clone",
+    "pwa",
+    "progressive-web-app",
+    "navidrome",
+    "subsonic",
+    "music",
+    "streaming",
+    "vue",
+    "vue3",
+    "vite",
+    "tailwindcss"
+  ],
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "key:generate": "node scripts/generate-key.js"
   },
   "dependencies": {
     "axios": "^1.11.0",
@@ -27,10 +53,5 @@
     "tailwindcss": "^3.1.12",
     "vite": "^7.0.6",
     "vite-plugin-pwa": "^1.0.3"
-  },
-  "description": "This template should help get you started developing with Vue 3 in Vite.",
-  "main": "vite.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
